@@ -1,0 +1,42 @@
+.startScreen {
+    background-color: #404040;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        height: 100vh;
+        width: 100%;
+    }
+
+    .startButton {
+        position: absolute;
+        top: 200px;
+        bottom: 0;
+        right: 800px;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            padding-left: 60px;
+            padding-right: 60px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgb(170, 39, 39);
+            font-size: 24px;
+            color: white;
+
+            &:hover {
+                opacity: 0.5;
+                cursor: pointer;
+            }
+        }
+    }
+}
