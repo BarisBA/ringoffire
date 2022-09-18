@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ring-of-fire-daeb3": {
+      "hosting": {
+        "ringoffire": [
+          "ring-of-fire-daeb3"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ring-of-fire-daeb3"
+  }
+}
