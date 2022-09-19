@@ -13,8 +13,6 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  takeCardAnimation = false;
-  currentCard = '';
   game: Game;
   games$: Observable<any>;
   gameId;
@@ -30,35 +28,38 @@ export class GameComponent implements OnInit {
       //this.games$ = collectionData(coll);
       
       getDoc(doc(coll, this.gameId))
-      .then(game => console.log(game));
+      .then(games => this.game = new Game());
+      
       /*
-      this.games$.subscribe((newGameUpdate: any) => {
-        console.log('Game update', newGameUpdate)
-        this.game.currentPlayer = newGameUpdate.currentPlayer;
-        this.game.playedCards = newGameUpdate.playedCards;
-        this.game.players = newGameUpdate.players;
-        this.game.stack = newGameUpdate.stack;
+      this.games$.subscribe((game: any) => {
+        console.log('Game update', game)
+        this.game.currentPlayer = game.currentPlayer;
+        this.game.playedCards = game.playedCards;
+        this.game.players = game.players;
+        this.game.stack = game.stack;
+        this.game.takeCardAnimation = game.takeCardAnimation;
+        this.game.currentCard = game.currentCard;
       });*/
     })
   }
 
   newGame() {
     this.game = new Game();
-    //const coll = collection(this.firestore, 'games');
-    //setDoc(doc(coll), {game: this.game.toJson()})
   }
 
   takeCard() {
-    if (!this.takeCardAnimation) {
-      this.currentCard = this.game.stack.pop();
-      this.takeCardAnimation = true;
-      this.game.playedCards.push(this.currentCard);
+    if (!this.game.takeCardAnimation) {
+      this.game.currentCard = this.game.stack.pop();
+      this.game.takeCardAnimation = true;
+      this.game.playedCards.push(this.game.currentCard);
+      this.saveGame();
 
       this.game.currentPlayer++;
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
 
       setTimeout(() => {
-        this.takeCardAnimation = false;
+        this.game.takeCardAnimation = false;
+        this.saveGame();
       }, 1500);
     }
   }
@@ -75,11 +76,11 @@ export class GameComponent implements OnInit {
   }
 
   async saveGame() {
+    
     const coll = collection(this.firestore, 'games');
     getDoc(doc(coll, this.gameId));
-    const gi = doc(coll, this.gameId);
-    await updateDoc(gi, {
-      update: this.game.toJson()
+    await updateDoc(doc(this.firestore, 'games', this.gameId),{
+      game: this.game.toJson()
     });
   }
 }
