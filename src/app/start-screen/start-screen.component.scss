@@ -5,13 +5,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('./../../assets/img/startScreen2.jpg');
-    background-size: cover;
+    background-color: rgb(39, 22, 20);
+    background-image: url('./../../assets/img/startScreen3.jpg');
     background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat ;
 
     img {
         height: 100vh;
         width: 100%;
+        object-fit: cover;
     }
 
     .startButton {
@@ -38,6 +41,53 @@
             &:hover {
                 opacity: 0.5;
                 cursor: pointer;
+            }
+        }
+    }
+
+    @media (max-width: 1100px) {
+        .startButton {
+            top: 550px;
+            right: 600px;
+        }
+    }
+
+    @media (max-width: 800px) {
+       .startButton {
+            right: 450px;
+       }
+    }
+
+    @media (max-width: 690px) {
+        .startButton {
+            right: 300px;
+        }
+    }
+
+    @media (max-width: 550px) {
+        .startButton {
+            right: 250px;
+
+            button {
+                padding-left: 45px;
+                padding-right: 45px;
+                padding-top: 25px;
+                padding-bottom: 25px;
+                font-size: 18px;
+            }
+        }
+    }
+
+    @media (max-width: 440px) {
+        .startButton {
+            right: 200px;
+
+            button {
+                padding-left: 40px;
+                padding-right: 40px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                font-size: 18px;
             }
         }
     }

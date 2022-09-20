@@ -23,21 +23,21 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.gameId = params['id'];
 
-      //this.getDoc();
-      const coll = collection(this.firestore, 'games');
-      const docSnap = getDoc(doc(coll, this.gameId))
-      .then(game => this.game = new Game())
+      this.getDoc();
+      //const coll = collection(this.firestore, 'games');
+      //const docSnap = getDoc(doc(coll, this.gameId))
+        //.then(game => this.game = new Game())
     })
   }
-/*
-  async getDoc() {
-    const docRef = doc(this.firestore, 'games');
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+  
+    async getDoc() {
+      const docRef = doc(this.firestore, 'games',this.gameId);
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      }
     }
-  }*/
 
   newGame() {
     this.game = new Game();
@@ -75,12 +75,8 @@ export class GameComponent implements OnInit {
 
     const coll = collection(this.firestore, 'games');
     const docSnap = await getDoc(doc(coll, this.gameId));
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-          await updateDoc(doc(this.firestore, 'games', this.gameId), {
+    await updateDoc(doc(this.firestore, 'games', this.gameId), {
       game: this.game.toJson()
     });
-    }
-
   }
 }
