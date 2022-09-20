@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameComponent implements OnInit {
   game: Game;
+  game$: Observable<any>;
   gameId;
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) { }
@@ -23,21 +24,29 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.gameId = params['id'];
 
-      this.getDoc();
-      //const coll = collection(this.firestore, 'games');
+
+      //this.getDoc();
+      const coll = collection(this.firestore, 'games');
+      this.game$ = collectionData(coll,this.gameId)
+      this.game$.subscribe( ( newGame: any) => {
+        console.log('game update', newGame);
+        this.game = newGame;
+        this.game.currentPlayer = newGame.currentPlayer;
+        this.game.playedCards = newGame.playedCards;
+        this.game.players = newGame.players;
+        this.game.stack = newGame.stack;
+        this.game.takeCardAnimation = newGame.takeCardAnimation,
+        this.game.currentCard = newGame.currentCard
+      });
       //const docSnap = getDoc(doc(coll, this.gameId))
         //.then(game => this.game = new Game())
     })
   }
-  
+  /*
     async getDoc() {
       const docRef = doc(this.firestore, 'games',this.gameId);
       const docSnap = await getDoc(docRef);
-  
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-      }
-    }
+    }*/
 
   newGame() {
     this.game = new Game();
@@ -56,7 +65,7 @@ export class GameComponent implements OnInit {
       setTimeout(() => {
         this.game.takeCardAnimation = false;
         this.saveGame();
-      }, 1500);
+      }, 1000);
     }
   }
 
@@ -74,8 +83,9 @@ export class GameComponent implements OnInit {
   async saveGame() {
 
     const coll = collection(this.firestore, 'games');
-    const docSnap = await getDoc(doc(coll, this.gameId));
-    await updateDoc(doc(this.firestore, 'games', this.gameId), {
+    //this.game$ = collectionData(coll, this.gameId)
+    //const docSnap = await getDoc(doc(coll, this.gameId));
+    await updateDoc(doc(coll, this.gameId), {
       game: this.game.toJson()
     });
   }
