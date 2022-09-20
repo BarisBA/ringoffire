@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { collectionData, doc, Firestore, getDoc, updateDoc } from '@angular/fire/firestore';
+import { collectionData, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { collection, setDoc } from '@firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +14,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameComponent implements OnInit {
   game: Game;
-  games$: Observable<any>;
   gameId;
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) { }
@@ -24,13 +23,21 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.gameId = params['id'];
 
+      //this.getDoc();
       const coll = collection(this.firestore, 'games');
-      this.games$ = collectionData(coll);
-      
-      getDoc(doc(coll, this.gameId));
-
+      const docSnap = getDoc(doc(coll, this.gameId))
+      .then(game => this.game = new Game())
     })
   }
+/*
+  async getDoc() {
+    const docRef = doc(this.firestore, 'games');
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    }
+  }*/
 
   newGame() {
     this.game = new Game();
@@ -41,11 +48,11 @@ export class GameComponent implements OnInit {
       this.game.currentCard = this.game.stack.pop();
       this.game.takeCardAnimation = true;
       this.game.playedCards.push(this.game.currentCard);
-      this.saveGame();
 
       this.game.currentPlayer++;
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
 
+      this.saveGame();
       setTimeout(() => {
         this.game.takeCardAnimation = false;
         this.saveGame();
@@ -65,11 +72,15 @@ export class GameComponent implements OnInit {
   }
 
   async saveGame() {
-    
+
     const coll = collection(this.firestore, 'games');
-    getDoc(doc(coll, this.gameId));
-    await updateDoc(doc(this.firestore, 'games', this.gameId),{
+    const docSnap = await getDoc(doc(coll, this.gameId));
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+          await updateDoc(doc(this.firestore, 'games', this.gameId), {
       game: this.game.toJson()
     });
+    }
+
   }
 }
