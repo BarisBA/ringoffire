@@ -24,29 +24,34 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.gameId = params['id'];
 
-
-      //this.getDoc();
       const coll = collection(this.firestore, 'games');
       this.game$ = collectionData(coll,this.gameId)
-      this.game$.subscribe( ( newGame: any) => {
-        console.log('game update', newGame);
-        this.game = newGame;
-        this.game.currentPlayer = newGame.currentPlayer;
-        this.game.playedCards = newGame.playedCards;
-        this.game.players = newGame.players;
-        this.game.stack = newGame.stack;
-        this.game.takeCardAnimation = newGame.takeCardAnimation,
-        this.game.currentCard = newGame.currentCard
+      this.game$.subscribe( ( games: any) => {
+        this.getDoc(this.gameId);
+        /*
+        console.log('game update', games);
+        this.game = games;
+        this.game.currentPlayer = games.currentPlayer;
+        this.game.playedCards = games.playedCards;
+        this.game.players = games.players;
+        this.game.stack = games.stack;
+        this.game.takeCardAnimation = games.takeCardAnimation,
+        this.game.currentCard = games.currentCard
+        */
       });
-      //const docSnap = getDoc(doc(coll, this.gameId))
-        //.then(game => this.game = new Game())
     })
+    
+    
   }
-  /*
-    async getDoc() {
-      const docRef = doc(this.firestore, 'games',this.gameId);
-      const docSnap = await getDoc(docRef);
-    }*/
+  
+    async getDoc(params: any) {
+      onSnapshot(doc(this.firestore, 'games', params), (doc) => {
+        let data: any = doc.data();
+        this.game = data['game'];
+        //console.log('Current data', doc.data());
+        //console.log(this.game);
+      })
+    }
 
   newGame() {
     this.game = new Game();
@@ -62,11 +67,12 @@ export class GameComponent implements OnInit {
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
 
       this.saveGame();
+      
       setTimeout(() => {
         this.game.takeCardAnimation = false;
-        this.saveGame();
       }, 1000);
     }
+    console.log(this.game.currentPlayer);
   }
 
   openDialog(): void {
@@ -80,13 +86,11 @@ export class GameComponent implements OnInit {
     });
   }
 
-  async saveGame() {
-
-    const coll = collection(this.firestore, 'games');
-    //this.game$ = collectionData(coll, this.gameId)
-    //const docSnap = await getDoc(doc(coll, this.gameId));
-    await updateDoc(doc(coll, this.gameId), {
-      game: this.game.toJson()
+  saveGame() {
+    //this.getDoc(this.gameId);
+    updateDoc(doc(this.firestore,'games', this.gameId), {
+      game: this.game
     });
+    //console.log('save');
   }
 }
