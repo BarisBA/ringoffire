@@ -6,6 +6,7 @@ import { collectionData, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@
 import { Observable } from 'rxjs';
 import { collection, setDoc } from '@firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 @Component({
   selector: 'app-game',
@@ -16,6 +17,7 @@ export class GameComponent implements OnInit {
   game: Game;
   game$: Observable<any>;
   gameId;
+  gameOver = false;
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) { }
 
@@ -58,7 +60,10 @@ export class GameComponent implements OnInit {
   }
 
   takeCard() {
-    if (!this.game.takeCardAnimation) {
+    if (this.game.stack.length == 0) {
+      this.gameOver = true;
+    } 
+    else if (!this.game.takeCardAnimation) {
       this.game.currentCard = this.game.stack.pop();
       this.game.takeCardAnimation = true;
       this.game.playedCards.push(this.game.currentCard);
@@ -73,6 +78,18 @@ export class GameComponent implements OnInit {
       }, 1000);
     }
     console.log(this.game.currentPlayer);
+  }
+
+  editPlayer(playerId) {
+    console.log('edit player', playerId);
+    
+    const dialogRef = this.dialog.open(EditPlayerComponent);
+    dialogRef.afterClosed().subscribe((change: string) => {
+        if (change == 'DELETE') {
+          this.game.players.splice(playerId, 1)
+        } 
+        this.saveGame;
+    })
   }
 
   openDialog(): void {
