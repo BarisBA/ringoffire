@@ -18,6 +18,7 @@ export class GameComponent implements OnInit {
   game$: Observable<any>;
   gameId;
   gameOver = false;
+  playerAdded = false;
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) { }
 
@@ -30,16 +31,6 @@ export class GameComponent implements OnInit {
       this.game$ = collectionData(coll,this.gameId)
       this.game$.subscribe( ( games: any) => {
         this.getDoc(this.gameId);
-        /*
-        console.log('game update', games);
-        this.game = games;
-        this.game.currentPlayer = games.currentPlayer;
-        this.game.playedCards = games.playedCards;
-        this.game.players = games.players;
-        this.game.stack = games.stack;
-        this.game.takeCardAnimation = games.takeCardAnimation,
-        this.game.currentCard = games.currentCard
-        */
       });
     })
     
@@ -50,8 +41,6 @@ export class GameComponent implements OnInit {
       onSnapshot(doc(this.firestore, 'games', params), (doc) => {
         let data: any = doc.data();
         this.game = data['game'];
-        //console.log('Current data', doc.data());
-        //console.log(this.game);
       })
     }
 
@@ -77,7 +66,6 @@ export class GameComponent implements OnInit {
         this.game.takeCardAnimation = false;
       }, 1000);
     }
-    console.log(this.game.currentPlayer);
   }
 
   editPlayer(playerId) {
@@ -101,6 +89,8 @@ export class GameComponent implements OnInit {
         this.saveGame();
       }
     });
+    
+    this.playerAdded = true;
   }
 
   saveGame() {

@@ -1,5 +1,24 @@
 mat-card {
     @media (max-width: 720px) {
-        min-height: 120px;
+        min-height: 60px;
+    }
+    .card {
+        @media (max-width: 720px) {
+            max-width: 500px;
+        }
+        
+        @media (max-width: 600px) {
+            max-width: 400px;
+        }
+
+        @media (max-width: 480px) {
+            max-width: 300px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 380px) {
+            max-width: 250px;
+            font-size: 10px;
+        }
     }
 }

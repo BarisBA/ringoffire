@@ -6,13 +6,13 @@ body {
     overflow: hidden;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1000px) {
     .hideMobile {
         display: none;
     }
 }
 
-@media (min-width: 720px) {
+@media (min-width: 1000px) {
     .hideDesktop {
         display: none;
     }

@@ -22,7 +22,7 @@ export class Game {
             players: this.players,
             stack: this.stack,
             playedCards: this.playedCards,
-            currentplayer: this.currentPlayer,
+            currentPlayer: this.currentPlayer,
             takeCardAnimation: this.takeCardAnimation,
             currentCard: this.currentCard
         }

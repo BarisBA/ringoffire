@@ -1,9 +1,13 @@
-<app-player (click)="editPlayer(i)" *ngFor="let player of game.players; let i=index;" [ngStyle]="{'top.px': 20 + (i * 70)}"
-    [playerActive]="i == game.currentPlayer" [name]="player" class="playerPosition hideMobile"></app-player>
-
 <div class="scrollContainer">
-    <app-player-mobile (click)="editPlayer(i)" class="hideDesktop" *ngFor="let player of game.players; let i=index;" [playerActive]="i == game.currentPlayer"
-        [name]="player"></app-player-mobile>
+    <app-player (click)="editPlayer(i)" class="hideMobile zIndex" *ngFor="let player of game.players; let i = index;"
+        [playerActive]="i == game.currentPlayer" [name]="player">
+    </app-player>
+</div>
+
+<div class="scrollContainerMobile">
+    <app-player-mobile (click)="editPlayer(i)" class="hideDesktop zIndex"
+        *ngFor="let player of game.players; let i=index;" [playerActive]="i == game.currentPlayer" [name]="player">
+    </app-player-mobile>
 </div>
 
 <div *ngIf="gameOver" class="gameOver">
@@ -15,7 +19,8 @@
         <!-- Card Stack -->
         <img *ngFor="let card of [0,1,2,3]; let i = index;" [ngStyle]="{'right.px': i * 5}"
             src="assets/img/card_cover.png">
-        <img (click)="takeCard()" class="topCard" style="right: 25px;" src="assets/img/card_cover.png">
+        <img *ngIf="playerAdded" (click)="takeCard()" class="topCard" style="right: 25px;"
+            src="assets/img/card_cover.png">
 
         <!-- current card animation -->
         <img (click)="takeCard()" *ngIf="game.takeCardAnimation" class="takeCard" style="right: 25px;"
