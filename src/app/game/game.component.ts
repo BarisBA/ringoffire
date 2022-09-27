@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { collectionData, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collectionData, doc, Firestore, getDoc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { collection, setDoc } from '@firebase/firestore';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 @Component({
@@ -20,7 +20,7 @@ export class GameComponent implements OnInit {
   gameOver = false;
   playerAdded = false;
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) { }
+  constructor(private router: Router, private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) { }
 
   ngOnInit(): void {
     this.newGame();
@@ -33,8 +33,19 @@ export class GameComponent implements OnInit {
         this.getDoc(this.gameId);
       });
     })
-    
-    
+  }
+
+  async restartGame() {
+    let game = new Game();
+
+    const coll = collection(this.firestore, 'games');
+    const docRef = await addDoc(coll, 
+      { game: game.toJson() }
+    )
+    .then((gameInfo: any) => {
+      this.router.navigateByUrl('/game/' + gameInfo.id);
+    });
+    this.gameOver = false;
   }
   
     async getDoc(params: any) {

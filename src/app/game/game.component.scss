@@ -130,8 +130,35 @@ app-player-mobile {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: black;
     height: 100vh;
-    background-color: rgb(6, 25, 27);
+
+    img {
+        object-fit: cover;
+        width: 600px;
+    }
+}
+
+.restartButton {
+    position: absolute;
+    top: 330px;
+    
+    button {
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        border-radius: 8px;
+        border: none;
+        background-color: rgb(170, 39, 39);
+        font-size: 24px;
+        color: white;
+
+        &:hover {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+    }
 }
 
 @media (max-width: 720px) {
@@ -139,5 +166,22 @@ app-player-mobile {
         bottom: 0px;
         left: 0px;
         right: 0px;
+    }
+}
+
+@media (max-width: 520px) {
+    .gameOver {
+        img {
+            width: 400px;
+        }
+    }
+
+    .restartButton {
+        button {
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
     }
 }

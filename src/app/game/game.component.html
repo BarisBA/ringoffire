@@ -1,17 +1,20 @@
-<div class="scrollContainer">
+<div *ngIf="!gameOver" class="scrollContainer">
     <app-player (click)="editPlayer(i)" class="hideMobile zIndex" *ngFor="let player of game.players; let i = index;"
         [playerActive]="i == game.currentPlayer" [name]="player">
     </app-player>
 </div>
 
-<div class="scrollContainerMobile">
+<div *ngIf="!gameOver" class="scrollContainerMobile">
     <app-player-mobile (click)="editPlayer(i)" class="hideDesktop zIndex"
         *ngFor="let player of game.players; let i=index;" [playerActive]="i == game.currentPlayer" [name]="player">
     </app-player-mobile>
 </div>
 
 <div *ngIf="gameOver" class="gameOver">
-    <img src="./../../assets/img/gameOver.jpg">
+    <img src="./../../assets/img/gameOver2.png">
+    <div class="restartButton">
+        <button (click)="restartGame()">Restart Game</button>
+    </div>
 </div>
 
 <div *ngIf="!gameOver" class="playground">
