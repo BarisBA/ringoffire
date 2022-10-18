@@ -2,7 +2,7 @@
     width: 100vw;
     height: 100vh;
     max-width: 100%;
-    background-image: url('/assets/img/playground.jpg');
+    background-image: url('~/assets/img/playground.jpg');
     display: flex;
     justify-content: center;
     align-items: center;
@@ -184,4 +184,13 @@ app-player-mobile {
             padding-bottom: 20px;
         }
     }
+}
+
+@media (max-width: 450px) {
+    .cardStack {
+        img {
+            width: 90px;
+        }
+    }
+    
 }
